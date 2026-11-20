@@ -38,7 +38,8 @@ config = yaml.safe_load(manifest.read_text())
 upstream = yaml.safe_load(Path("zmk/app/west.yml").read_text())
 zephyr = next(p for p in upstream["manifest"]["projects"] if p["name"] == "zephyr")
 zephyr["revision"] = "dacab4875df72109b96cc8977547a0dc04875bcd"
-config["manifest"]["projects"].insert(0, zephyr)
+# Keep ZMK's explicit nanopb fork ahead of the optional Zephyr module.
+config["manifest"]["projects"].extend(upstream["manifest"]["projects"])
 manifest.write_text(yaml.safe_dump(config, sort_keys=False))
 PY
 west update --fetch-opt=--filter=tree:0
