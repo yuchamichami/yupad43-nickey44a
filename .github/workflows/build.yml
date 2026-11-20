@@ -1,0 +1,31 @@
+name: Build Nickey44A firmware
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  firmware:
+    runs-on: ubuntu-latest
+    container:
+      image: zmkfirmware/zmk-build-arm@sha256:edb1c953438c6f720ddb79c3762f3972013b7fbbaf4fff3592fc869983e7afc5
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [nix, ats]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Build and verify both halves
+        run: |
+          ./build.sh "${{ matrix.profile }}" "$RUNNER_TEMP/nickey-${{ matrix.profile }}"
+          cp -R "$RUNNER_TEMP/nickey-${{ matrix.profile }}/output" dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nickey44a-${{ matrix.profile }}
+          path: dist/
+          if-no-files-found: error

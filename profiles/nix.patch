@@ -1,0 +1,65 @@
+diff --git a/boards/shields/nickey44a/nickey44a_r.overlay b/boards/shields/nickey44a/nickey44a_r.overlay
+index 09e22a9..87d27d1 100644
+--- a/boards/shields/nickey44a/nickey44a_r.overlay
++++ b/boards/shields/nickey44a/nickey44a_r.overlay
+@@ -4,7 +4,7 @@
+     yupad43_listener: yupad43_listener {
+         compatible = "zmk,input-listener";
+         device = <&yupad43>;
+-        input-processors = <&zip_scroll_scaler 1 12>;
++        input-processors = <&zip_scroll_scaler 1 16>;
+     };
+ };
+ 
+diff --git a/config/nickey44a_r.conf b/config/nickey44a_r.conf
+index e21f9c4..a543c1c 100644
+--- a/config/nickey44a_r.conf
++++ b/config/nickey44a_r.conf
+@@ -21,7 +21,7 @@ CONFIG_INPUT_IQS9151_RESOLUTION_X=1300
+ CONFIG_INPUT_IQS9151_RESOLUTION_Y=1192
+ CONFIG_INPUT_IQS9151_ROTATE_90=y
+ CONFIG_INPUT_IQS9151_CURSOR_INERTIA_ENABLE=n
+-CONFIG_INPUT_IQS9151_SCROLL_INERTIA_ENABLE=n
++CONFIG_INPUT_IQS9151_SCROLL_INERTIA_ENABLE=y
+ 
+ #Layer LED config -------------------
+ CONFIG_RGBLED_WIDGET_BATTERY_LEVEL_HIGH=30
+diff --git a/config/west.yml b/config/west.yml
+index 8165f6e..ae624fe 100644
+--- a/config/west.yml
++++ b/config/west.yml
+@@ -16,6 +16,6 @@ manifest:
+       revision: 8756cb7b8114069fa3c25c6f6c990f24988fceff # v0.3
+     - name: zmk-driver-yupad43
+       url: https://github.com/yuchamichami/zmk-driver-yupad43
+-      revision: 5dfa6d3c480ebb5162f5425fa367823d73ddb13e # official integration baseline
++      revision: 58e590adbe448924ac104747ee6366d79f16d04c
+   self:
+     path: config
+diff --git a/scripts/check_dual_yupad43.py b/scripts/check_dual_yupad43.py
+index 15145ec..8ce9b02 100644
+--- a/scripts/check_dual_yupad43.py
++++ b/scripts/check_dual_yupad43.py
+@@ -38,10 +38,10 @@ def main():
+         for name in ("INPUT_IQS9151", "GPIO", "I2C", "INPUT", "ZMK_POINTING",
+                      "ZMK_SPLIT",
+                      "ZMK_SLEEP", "ZMK_BATTERY_REPORTING",
+-                     "INPUT_IQS9151_1F_TAP_ENABLE", "INPUT_IQS9151_2F_TAP_ENABLE"):
+-            assert cfg.get("CONFIG_" + name) == "y", (side, name)
+-        for name in ("INPUT_TPS43", "INPUT_IQS9151_CURSOR_INERTIA_ENABLE",
++                     "INPUT_IQS9151_1F_TAP_ENABLE", "INPUT_IQS9151_2F_TAP_ENABLE",
+                      "INPUT_IQS9151_SCROLL_INERTIA_ENABLE"):
++            assert cfg.get("CONFIG_" + name) == "y", (side, name)
++        for name in ("INPUT_TPS43", "INPUT_IQS9151_CURSOR_INERTIA_ENABLE"):
+             assert cfg.get("CONFIG_" + name) != "y", (side, name)
+         assert cfg["CONFIG_INPUT_IQS9151_RESOLUTION_X"] == "1300"
+         assert cfg["CONFIG_INPUT_IQS9151_RESOLUTION_Y"] == "1192"
+@@ -90,7 +90,7 @@ def main():
+         listener = right.label2node[label]
+         assert listener.props["device"].to_node() is device
+         assert cells(listener.props["input-processors"]) == [
+-            right.label2node["zip_scroll_scaler"].props["phandle"].to_num(), 1, 12]
++            right.label2node["zip_scroll_scaler"].props["phandle"].to_num(), 1, 16]
+     print("PASS: yuPad43 pins, active-low RDY, address, rotation and firmware outputs")
+     print("PASS: right-only pad, single listener, basic input, battery/sleep/Studio")
+     print("Hardware direction, calibration, BLE and sleep/wake checks remain manual.")

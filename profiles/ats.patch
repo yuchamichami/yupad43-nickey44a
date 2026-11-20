@@ -1,0 +1,39 @@
+diff --git a/config/nickey44a_l.conf b/config/nickey44a_l.conf
+index 106ae14..981a399 100644
+--- a/config/nickey44a_l.conf
++++ b/config/nickey44a_l.conf
+@@ -14,6 +14,8 @@ CONFIG_ZMK_POINTING=y
+ CONFIG_INPUT_IQS9151=y
+ CONFIG_INPUT_IQS9151_RESOLUTION_X=1300
+ CONFIG_INPUT_IQS9151_RESOLUTION_Y=1192
++# Preserve the cursor glide from the original profile.
++CONFIG_INPUT_IQS9151_CURSOR_INERTIA_ENABLE=y
+ # Left pad is mounted rotated the other way: fix direction
+ CONFIG_INPUT_IQS9151_ROTATE_270=y
+ # Calm scrolling: no inertia, no pinch-zoom, larger start threshold
+diff --git a/config/nickey44a_r.conf b/config/nickey44a_r.conf
+index 6f07de5..12e5e57 100644
+--- a/config/nickey44a_r.conf
++++ b/config/nickey44a_r.conf
+@@ -21,6 +21,8 @@ CONFIG_ZMK_POINTING_SMOOTH_SCROLLING=y
+ CONFIG_INPUT_IQS9151=y
+ CONFIG_INPUT_IQS9151_RESOLUTION_X=1300
+ CONFIG_INPUT_IQS9151_RESOLUTION_Y=1192
++# Preserve the cursor glide from the original profile.
++CONFIG_INPUT_IQS9151_CURSOR_INERTIA_ENABLE=y
+ # Right pad: vertical scroll only (left pad does horizontal),
+ # and a 2-finger tap must not turn into a scroll.
+ CONFIG_INPUT_IQS9151_SCROLL_X_ENABLE=n
+diff --git a/config/west.yml b/config/west.yml
+index d270221..db90e97 100644
+--- a/config/west.yml
++++ b/config/west.yml
+@@ -20,7 +20,7 @@ manifest:
+       revision: 8756cb7b8114069fa3c25c6f6c990f24988fceff # v0.3
+     - name: zmk-driver-yupad43
+       remote: yuchamichami
+-      revision: 5dfa6d3c480ebb5162f5425fa367823d73ddb13e
++      revision: 58e590adbe448924ac104747ee6366d79f16d04c
+     - name: zmk-scroll-snap
+       remote: kot149
+       revision: 6b2dccaab2d5b99ca8b79300b9a792fefb01c42d # v1
